@@ -6,7 +6,10 @@ import pickle
 import os
 from sklearn.feature_extraction.text import TfidfVectorizer, TfidfTransformer
 
-model = pickle.load(open("/Users/karan/Desktop/final project demo/Safe_Chat/LinearSVC.pkl", 'rb'))
+# Use relative paths based on the directory of this script
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+model = pickle.load(open(os.path.join(BASE_DIR, "LinearSVC.pkl"), 'rb'))
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 IP_address = "127.0.0.1"
 port = 12345
@@ -23,11 +26,11 @@ server.send(str.encode(room_id))
 
 def prettyPrinter(self,data_1):
          # List of stopwords 
-    my_file = open("/Users/karan/Desktop/final project demo/Safe_Chat/stopwords.txt", "r")
+    my_file = open(os.path.join(BASE_DIR, "stopwords.txt"), "r")
     content = my_file.read()
     content_list = content.split("\n")
     my_file.close()
-    tfidf_vector =  TfidfVectorizer(stop_words = content_list, lowercase = True,vocabulary=pickle.load(open("/Users/karan/Desktop/final project demo/Safe_Chat/tfidf_vector_vocabulary.pkl", "rb")))
+    tfidf_vector =  TfidfVectorizer(stop_words = content_list, lowercase = True,vocabulary=pickle.load(open(os.path.join(BASE_DIR, "tfidf_vector_vocabulary.pkl"), "rb")))
     data_2=tfidf_vector.fit_transform([data_1])
     print(data_2)
     pred = model.predict(data_2)
@@ -99,4 +102,3 @@ while True:
                 sys.stdout.write(message)
                 sys.stdout.flush()
 server.close()
-
